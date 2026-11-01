@@ -319,12 +319,14 @@ The `docs/` directory contains comprehensive technical specifications written fo
 | | [03 - Technology Stack](docs/00-overview/03-technology-stack.md) | Tooling, libraries, framework evaluations, and justifications |
 | | [04 - Application Lifecycle](docs/00-overview/04-application-lifecycle.md) | Startup, active runtime, pause/resume, and teardown |
 | | [05 - System Data Flow](docs/00-overview/05-system-data-flow.md) | End-to-end data pipelines from HCI sensors to SQLite |
+| | [06 - Presentation & Defense Speech](docs/00-overview/06-presentation-and-defense-speech.md) | 10-minute executive presentation & defense Q&A |
 | **01 - Database** | [01 - Database Overview](docs/01-database/01-database-overview.md) | SQLite architecture, WAL mode, connection management |
 | | [02 - Database Schema](docs/01-database/02-database-schema.md) | Column-level schema for all 14 tables with ER diagrams |
 | | [03 - Data Models](docs/01-database/03-data-models.md) | TypeScript interface mappings to SQLite relational rows |
 | | [04 - Database Operations](docs/01-database/04-database-operations.md) | SQL query catalog, parameters, return types, and indexing |
 | | [05 - Data Lifecycle](docs/01-database/05-data-lifecycle.md) | Journey of session and telemetry data from RAM to disk |
 | | [06 - Database Decisions](docs/01-database/06-database-decisions.md) | Rationale, trade-offs, constraints, and WAL performance |
+| | [07 - Presentation & Defense Speech](docs/01-database/07-presentation-and-defense-speech.md) | 10-minute database architecture presentation & defense Q&A |
 | **02 - Frontend** | [01 - Frontend Overview](docs/02-frontend/01-frontend-overview.md) | React 18 architecture, page routes, and layout shells |
 | | [02 - Component Architecture](docs/02-frontend/02-component-architecture.md) | UI primitives, domain widgets, props contracts, error boundary |
 | | [03 - State Management](docs/02-frontend/03-state-management.md) | FocusSessionContext, custom hooks, ref anchors, render isolation |
@@ -332,47 +334,56 @@ The `docs/` directory contains comprehensive technical specifications written fo
 | | [05 - Timer Lifecycle](docs/02-frontend/05-timer-lifecycle.md) | State machine transitions, pause/resume loops, break automations |
 | | [06 - Frontend-Backend Communication](docs/02-frontend/06-frontend-backend-communication.md) | IPC channels, payload normalization, error envelopes |
 | | [07 - Frontend Decisions](docs/02-frontend/07-frontend-decisions.md) | Engineering trade-offs, 200ms tick interval, atomic save guards |
+| | [08 - Presentation & Defense Speech](docs/02-frontend/08-presentation-and-defense-speech.md) | 10-minute frontend & timing presentation & defense Q&A |
 | **03 - Blocking** | [01 - Blocking Overview](docs/03-blocking/01-blocking-overview.md) | System-wide domain redirection and process enforcement |
 | | [02 - Blocking Architecture](docs/03-blocking/02-blocking-architecture.md) | Activation sequences, continuous 30s audit loops, shutdown paths |
 | | [03 - Application Detection](docs/03-blocking/03-application-detection.md) | `tasklist`/`ps` parsing, command injection regex defense, `taskkill` |
 | | [04 - Website Blocking](docs/03-blocking/04-website-blocking.md) | OS hosts redirection, socket keep-alive problem, PowerShell/AppleScript |
 | | [05 - Enforcement Mechanism](docs/03-blocking/05-enforcement-mechanism.md) | Detached crash-resilient watchdog daemon, parent PID monitoring |
 | | [06 - Blocking Decisions](docs/03-blocking/06-blocking-decisions.md) | Hosts vs. local proxy vs. browser extension trade-offs |
+| | [07 - Presentation & Defense Speech](docs/03-blocking/07-presentation-and-defense-speech.md) | 8-minute blocking & watchdog presentation & defense Q&A |
 | **04 - Main Process** | [01 - Main Process Overview](docs/04-main-process/01-main-process-overview.md) | Node.js kernel role, 8 IPC routers, directory layout |
 | | [02 - Application Lifecycle](docs/04-main-process/02-application-lifecycle.md) | Window construction, context isolation security, `before-quit` |
 | | [03 - IPC Architecture](docs/04-main-process/03-ipc-architecture.md) | `ipcMain.handle`, `webContents.send`, standard response envelopes |
 | | [04 - Background Services](docs/04-main-process/04-background-services.md) | 1Hz poller, Focus Buffer orchestrator, Python process manager |
 | | [05 - Main Process Decisions](docs/04-main-process/05-main-process-decisions.md) | Centralized Node process vs. native services, stdio IPC rationale |
+| | [06 - Presentation & Defense Speech](docs/04-main-process/06-presentation-and-defense-speech.md) | 8-minute main process & IPC presentation & defense Q&A |
 | **05 - Preload** | [01 - Preload Overview](docs/05-preload/01-preload-overview.md) | Security mediator role, ambient TypeScript declarations |
 | | [02 - ContextBridge](docs/05-preload/02-context-bridge.md) | Prototype poisoning defense, V8 structured clone algorithm |
 | | [03 - IPC Communication](docs/05-preload/03-ipc-communication.md) | Channel mapping, React hook unsubscription pattern |
 | | [04 - Security Boundaries](docs/05-preload/04-security-boundaries.md) | Threat modeling, RCE elimination, input sanitization rules |
+| | [05 - Presentation & Defense Speech](docs/05-preload/05-presentation-and-defense-speech.md) | 5-minute security boundary presentation & defense Q&A |
 | **06 - Telemetry** | [01 - Telemetry Overview](docs/06-telemetry/01-telemetry-overview.md) | HCI sensor architecture, privacy guarantees, no-keylogger policy |
 | | [02 - Event Collection](docs/06-telemetry/02-event-collection.md) | Win32 C# dynamic compilation, AppleScript, mouse kinematics |
 | | [03 - Activity Tracking](docs/06-telemetry/03-activity-tracking.md) | URL/app categorization heuristics, idle tiers, distraction alerts |
 | | [04 - Data Processing](docs/06-telemetry/04-data-processing.md) | Sliding window KPM scaling, post-session aggregation, Focus Score formula |
 | | [05 - Telemetry Decisions](docs/06-telemetry/05-telemetry-decisions.md) | 1Hz polling vs. native hooks, 60s chunking trade-offs |
+| | [06 - Presentation & Defense Speech](docs/06-telemetry/06-presentation-and-defense-speech.md) | 8-minute telemetry & HCI sensing presentation & defense Q&A |
 | **07 - Computer Vision** | [01 - Computer Vision Overview](docs/07-computer-vision/01-computer-vision-overview.md) | Visual attention tracking, privacy guarantee, JSON protocol |
 | | [02 - Image Processing Pipeline](docs/07-computer-vision/02-image-processing-pipeline.md) | Frame capture, color conversion, 478 landmark regression |
 | | [03 - Detection Mechanism](docs/07-computer-vision/03-detection-mechanism.md) | 3D solvePnP Euler angles, keyboard pitch detection, iris gaze ratio |
 | | [04 - Frame Processing](docs/07-computer-vision/04-frame-processing.md) | 2.0 FPS regulation, monotonic timing, preview streaming, teardown |
 | | [05 - CV Model Integration](docs/07-computer-vision/05-cv-model-integration.md) | MediaPipe task bundle, Python subprocess bridge, DB ingestion |
 | | [06 - Computer Vision Decisions](docs/07-computer-vision/06-computer-vision-decisions.md) | MediaPipe vs. Dlib, classical PnP vs. deep pose, horizontal gaze |
+| | [07 - Presentation & Defense Speech](docs/07-computer-vision/07-presentation-and-defense-speech.md) | 10-minute computer vision presentation & defense Q&A |
 | **08 - Machine Learning** | [01 - Machine Learning Overview](docs/08-machine-learning/01-machine-learning-overview.md) | Regression and anomaly detection objectives, dataset layout |
 | | [02 - Model Architecture](docs/08-machine-learning/02-model-architecture.md) | Random Forest Regressor math, Isolation Forest path lengths |
 | | [03 - Feature Engineering](docs/08-machine-learning/03-feature-engineering.md) | 13 aligned feature definitions, Gini importances, median imputation |
 | | [04 - Training & Inference](docs/08-machine-learning/04-training-and-inference.md) | 40-session sliding window, 5-fold CV, deployment gate, CLI predictor |
 | | [05 - Prediction Pipeline](docs/08-machine-learning/05-prediction-pipeline.md) | 5s polling loop, subprocess safety timeouts, weekly retraining daemon |
 | | [06 - Machine Learning Decisions](docs/08-machine-learning/06-machine-learning-decisions.md) | Random Forest vs. Deep Learning, sliding window vs. infinite data |
+| | [07 - Presentation & Defense Speech](docs/08-machine-learning/07-presentation-and-defense-speech.md) | 10-minute ML architecture presentation & defense Q&A |
 | **09 - Integration** | [01 - Module Interactions](docs/09-integration/01-module-interactions.md) | Process boundaries, interface definitions, subsystem topology |
 | | [02 - End-to-End Data Flow](docs/09-integration/02-end-to-end-data-flow.md) | Tracing sessions from launch to analytics across 4 phases |
 | | [03 - Error Handling](docs/09-integration/03-error-handling.md) | Fault tolerance matrix, error boundaries, watchdog recovery |
 | | [04 - Cross-Module Dependencies](docs/09-integration/04-cross-module-dependencies.md) | Table access patterns, shared types, team collaboration model |
+| | [05 - Presentation & Defense Speech](docs/09-integration/05-presentation-and-defense-speech.md) | 7-8 minute system integration presentation & defense Q&A |
 | **10 - Development** | [01 - Setup Guide](docs/10-development/01-setup-guide.md) | Prerequisites, Node/Python installation, native module rebuilds |
 | | [02 - Development Workflow](docs/10-development/02-development-workflow.md) | HMR feedback loops, standalone subsystem testing, git conventions |
 | | [03 - Debugging Guide](docs/10-development/03-debugging-guide.md) | In-app debug console, database inspection, troubleshooting pitfalls |
 | | [04 - Testing Guide](docs/10-development/04-testing-guide.md) | Static type checking, unit harnesses, interactive E2E checklist |
 | | [05 - Contribution Guidelines](docs/10-development/05-contribution-guidelines.md) | Code preservation rules, PR standards, four workstream assignments |
+| | [06 - Presentation & Defense Speech](docs/10-development/06-presentation-and-defense-speech.md) | 5-minute development & build presentation & defense Q&A |
 | **11 - Focus Buffer** | [01 - Focus Buffer Overview](docs/11-focus-buffer/01-focus-buffer-overview.md) | Dynamic energy reservoir model, cognitive momentum, real-time feedback |
 | | [02 - Buffer Math and Dynamics](docs/11-focus-buffer/02-buffer-math-and-dynamics.md) | Multiplicative decay, linear additive recovery, clamping limits |
 | | [03 - Signal Mapping Architecture](docs/11-focus-buffer/03-signal-mapping-architecture.md) | CV, keyboard, mouse, and window telemetry translation to [0.95, 1.0] |
@@ -380,12 +391,14 @@ The `docs/` directory contains comprehensive technical specifications written fo
 | | [05 - Distraction Penalty Calculation](docs/11-focus-buffer/05-distraction-penalty-calculation.md) | Event penalty points and domain deduplication logic |
 | | [06 - Focus Score Aggregation](docs/11-focus-buffer/06-focus-score-aggregation.md) | Multi-factor session scoring formula and dynamic CV rebalancing |
 | | [07 - Focus Buffer Decisions](docs/11-focus-buffer/07-focus-buffer-decisions.md) | Additive recovery rationale, contextual overrides, and grace periods |
+| | [08 - Presentation & Defense Speech](docs/11-focus-buffer/08-presentation-and-defense-speech.md) | 10-minute Focus Buffer presentation & defense Q&A |
 | **12 - Analytics** | [01 - Analytics Overview](docs/12-analytics/01-analytics-overview.md) | Behavioral intelligence, aggregated KPI summary, architectural layout |
 | | [02 - Heatmap Matrix Aggregation](docs/12-analytics/02-heatmap-matrix-aggregation.md) | 7x24 DayOfWeek vs HourOfDay SQL matrix and weighted sum collapses |
 | | [03 - Streak Calculation Engine](docs/12-analytics/03-streak-calculation-engine.md) | Pure habit streak math, DST immunity, and liveness semantics |
 | | [04 - Productivity Metrics & KPIs](docs/12-analytics/04-productivity-metrics-and-kpis.md) | Best/worst hour, uninterrupted focus stamina, total focused time |
 | | [05 - Recommendation Engine Heuristics](docs/12-analytics/05-recommendation-engine-heuristics.md) | 2-hour peak windows, culprit app/domain ranking, and NLP coaching |
 | | [06 - Analytics Decisions](docs/12-analytics/06-analytics-decisions.md) | SQLite-side local time rebasing, 10-session sufficiency gating |
+| | [07 - Presentation & Defense Speech](docs/12-analytics/07-presentation-and-defense-speech.md) | 7-8 minute analytics presentation & defense Q&A |
 
 ---
 
