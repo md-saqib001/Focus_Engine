@@ -104,3 +104,4 @@
 > - The Computer Vision Python process processes frames ephemerally without accumulating frame history.
 > - In React, the 200ms timer loop uses mutable `useRef` anchors rather than accumulating state histories in memory.
 > Total heap allocation remains completely flat at $\approx 85\text{ MB}$ across multi-hour stress runs."
+

@@ -134,3 +134,4 @@
 ### Question 3: "Does the buffer value oscillate rapidly across state boundaries (e.g. flickering between 74.9 and 75.1)?"
 **Model Answer:**
 > "Rapid state oscillation is naturally prevented by the physical inertia of the buffer math itself. Unlike a raw sensor reading that can jump erratically between samples, the Focus Buffer value changes smoothly: it decays exponentially by at most $1-5\%$ per second and recovers at a steady $0.5$ points per second. Crossing from 74 back to 75 requires at least 2 full seconds of unbroken focus. This built-in mathematical momentum eliminates the need for complex artificial hysteresis timers."
+

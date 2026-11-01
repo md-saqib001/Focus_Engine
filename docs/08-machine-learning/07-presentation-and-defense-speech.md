@@ -144,3 +144,4 @@
 ### Question 3: "Is calling `predict.py` as an OS child process every 5 seconds efficient, or does process creation overhead slow down the system?"
 **Model Answer:**
 > "On modern operating systems, spawning a local Python subprocess takes approximately 60 to 80 milliseconds. Because inference is triggered only when the user alters the session configuration slider or opens the dashboard (not during high-frequency 60 FPS rendering), an 80ms background task produces zero perceptible UI lag. However, on our architectural roadmap, we plan to export `focus_model.pkl` to the open **ONNX format** and execute inference directly inside Node.js via `onnxruntime-node`, which will reduce latency from 80ms down to sub-millisecond in-process execution."
+

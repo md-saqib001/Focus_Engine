@@ -102,3 +102,4 @@
 ### Question 3: "Why use dynamic C# compilation through PowerShell for window detection on Windows rather than a precompiled native Node C++ addon?"
 **Model Answer:**
 > "Dynamic C# compilation via the .NET runtime bundled with Windows guarantees 100% binary compatibility across all Windows versions without requiring native C++ build toolchains or incurring `NODE_MODULE_VERSION` ABI mismatch errors during Electron version upgrades. It compiles once in memory into a lightweight assembly and executes in mere microseconds. For production distribution, it provides frictionless reliability."
+

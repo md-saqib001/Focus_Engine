@@ -92,3 +92,4 @@
 ### Question 2: "Why keep the Python virtual environment at `python/cv_env` inside the repository instead of using the user's global Python environment?"
 **Model Answer:**
 > "Global Python environments are notorious for package version conflicts: a developer might have `numpy 1.24` or an incompatible version of MediaPipe installed for another project. By isolating dependencies inside `python/cv_env`, Focus Engine guarantees exact version pinning (`mediapipe==0.10.14`, `opencv-python==4.10.0.84`, `numpy==2.5.1`). Furthermore, the path `python/cv_env` is explicitly gitignored, ensuring developer environments remain clean."
+

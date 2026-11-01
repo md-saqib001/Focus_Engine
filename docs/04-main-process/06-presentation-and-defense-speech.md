@@ -115,3 +115,4 @@
 ### Question 3: "If the user closes the main window while a focus session is actively running, what happens?"
 **Model Answer:**
 > "In `src/main/index.ts`, the `mainWindow.on('close')` event intercepts window closure. If a session is active, it prompts the user with an explicit Electron confirmation dialog: *'A focus session is currently active. Are you sure you want to stop and quit?'* If the user confirms, it triggers the full session termination workflow—saving actual duration, finalizing the focus score, restoring the hosts file, and safely killing the Python subprocess before destroying the window."
+

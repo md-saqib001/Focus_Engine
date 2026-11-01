@@ -126,3 +126,4 @@
 > 3. The new rules are appended to the cleaned buffer.
 > 4. The buffer is written back atomically using `fs.writeFileSync`.
 > This guarantees that Focus Engine never duplicates entries, preserves all unrelated third-party hosts records, and leaves the file clean upon session exit."
+

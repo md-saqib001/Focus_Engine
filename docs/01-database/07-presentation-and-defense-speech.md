@@ -131,3 +131,4 @@
 > "All raw timestamps in SQLite are stored as UTC epoch milliseconds (`Date.now()`). However, habit streaks and circadian heatmaps are strictly local human phenomena. When querying heatmaps or daily streaks in `heatmapRepository.ts` and `streakCalculator.ts`, we push timezone conversion down to SQLite's C-engine using the `'localtime'` modifier:
 > `strftime('%w', start_time / 1000, 'unixepoch', 'localtime')`
 > This rebases UTC timestamps to the user's current local clock on the fly without altering the underlying immutable UTC storage."
+

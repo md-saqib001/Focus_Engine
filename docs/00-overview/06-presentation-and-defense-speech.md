@@ -120,3 +120,4 @@
 > 1. A **10-second Warmup Buffer** at session start where all multipliers are held at 1.0 while the user sets up their environment.
 > 2. A **10-second Look-Away Grace Period** in the CV signal mapper: brief glances at a second monitor, physical notes, or architectural sketches do not trigger decay unless gaze is diverted continuously for more than 10 seconds.
 > 3. **Contextual Cross-Signal Overrides**: If the user is actively reading documentation ($m_{\text{cv}} == 1.0$), keyboard and mouse idle penalties are neutralized to zero. If the user is typing ($KPM \ge 5$), mouse inactivity is completely forgiven."
+

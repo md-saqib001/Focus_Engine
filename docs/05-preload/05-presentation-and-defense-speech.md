@@ -91,3 +91,4 @@
 ### Question 2: "Can a compromised renderer script use `eval()` or construct malicious Function objects to break out of the context bridge?"
 **Model Answer:**
 > "No. Because `contextIsolation` is enabled, the renderer context and the preload context run in completely separate V8 execution worlds with distinct global objects and memory heaps. An `eval()` executed inside the renderer cannot access the preload context's closure scope, lexical variables, or native Node.js module references. The V8 structured clone boundary acts as a strict firewall."
+

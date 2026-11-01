@@ -137,3 +137,4 @@
 > "Focus Engine is designed for graceful degradation. If camera initialization fails or permission is denied, `cvHandlers.ts` catches the error, sets `cvAvailable = false`, and logs the absence in SQLite. Crucially, in `src/main/buffer/focusScoreCalculator.ts`, our focus score weighting automatically rebalances from $40/40/20$ to $50/50/0$:
 > $$\text{FocusScore} = 0.50 \cdot \text{AverageBuffer} + 0.50 \cdot \text{FocusPercentage} + 0.00 \cdot \text{CV}$$
 > The user is never penalized for lacking a camera; the system transitions seamlessly to pure peripheral telemetry."
+

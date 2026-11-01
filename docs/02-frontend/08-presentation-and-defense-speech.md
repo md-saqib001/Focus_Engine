@@ -146,3 +146,4 @@
 > }, [])
 > ```
 > When the component unmounts, Electron's `ipcRenderer.removeListener` is immediately executed, preventing dangling references, memory leaks, and React warnings about updating unmounted components."
+

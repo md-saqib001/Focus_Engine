@@ -115,3 +115,4 @@
 ### Question 3: "Why search for a contiguous 2-hour window in recommendations rather than a single 1-hour slot?"
 **Model Answer:**
 > "In deep engineering work, tasks rarely conform to isolated 45-minute blocks; cognitive flow spans multiple Pomodoro cycles or an entire morning. Single-hour slots exhibit high statistical variance—a single short session can create a false peak. By evaluating a 2-hour contiguous sliding window backed by a minimum of 3 completed sessions, the recommendation engine smooths outlier variance and identifies meaningful, sustainable deep-work time blocks."
+
