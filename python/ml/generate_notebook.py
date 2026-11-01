@@ -1,0 +1,232 @@
+import os
+import json
+
+def main():
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    notebook_path = os.path.join(script_dir, "eda.ipynb")
+    
+    # Define Jupyter Notebook Cells JSON structure
+    notebook = {
+        "cells": [
+            {
+                "cell_type": "markdown",
+                "metadata": {},
+                "source": [
+                    "# Focus Engine - Exploratory Data Analysis (EDA)\n",
+                    "\n",
+                    "This notebook performs EDA on the sliding window dataset (`dataset.csv`) comprising real focus sessions and bootstrapped synthetic sessions. It validates the synthetic archetypes, reviews feature correlations, checks for outliers, and maps local hour distributions."
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "import os\n",
+                    "import pandas as pd\n",
+                    "import numpy as np\n",
+                    "import matplotlib.pyplot as plt\n",
+                    "import seaborn as sns\n",
+                    "\n",
+                    "sns.set_theme(style=\"whitegrid\")\n",
+                    "\n",
+                    "# Setup paths\n",
+                    "script_dir = os.getcwd()\n",
+                    "dataset_path = os.path.join(script_dir, \"data\", \"dataset.csv\")\n",
+                    "output_dir = os.path.join(script_dir, \"eda_output\")\n",
+                    "os.makedirs(output_dir, exist_ok=True)\n",
+                    "\n",
+                    "print(f\"Reading dataset from: {dataset_path}\")"
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "# 1. Load Dataset\n",
+                    "df = pd.read_csv(dataset_path)\n",
+                    "print(f\"Total Rows in sliding training window: {len(df)}\")\n",
+                    "df.head()"
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "# 2. Summary Statistics\n",
+                    "df.describe().T"
+                ]
+            },
+            {
+                "cell_type": "markdown",
+                "metadata": {},
+                "source": [
+                    "### 3. Null Handling Strategy\n",
+                    "1. **Drop Target Nulls**: Rows missing `focus_score` are dropped entirely, as we cannot train supervised models without a target label.\n",
+                    "2. **Impute Feature Nulls**: Impute numeric features with their **Median** values. Median is preferred over Mean because it is robust to outliers, ensuring that metric peaks (e.g. huge KPM spikes or unusually long durations) do not skew the baseline imputations."
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "# Apply target drop\n",
+                    "initial_len = len(df)\n",
+                    "df = df.dropna(subset=['focus_score'])\n",
+                    "print(f\"Dropped {initial_len - len(df)} rows missing focus_score.\")\n",
+                    "\n",
+                    "# Apply feature median imputation\n",
+                    "numeric_cols = df.select_dtypes(include=[np.number]).columns\n",
+                    "for col in numeric_cols:\n",
+                    "    if col in ['focus_score', 'is_synthetic', 'timestamp']:\n",
+                    "        continue\n",
+                    "    null_mask = df[col].isnull()\n",
+                    "    if null_mask.any():\n",
+                    "        median_val = df[col].median()\n",
+                    "        df.loc[null_mask, col] = median_val\n",
+                    "        print(f\"Imputed {null_mask.sum()} nulls in '{col}' with median: {median_val}\")"
+                ]
+            },
+            {
+                "cell_type": "markdown",
+                "metadata": {},
+                "source": [
+                    "### 4. Outlier Audits\n",
+                    "Check for impossible durations (> 12 hours or <= 0s) and impossible average typing speeds (> 400 KPM)."
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "duration_outliers = df[(df['session_duration'] <= 0) | (df['session_duration'] > 43200)]\n",
+                    "print(f\"Anomalous durations (<=0s or >12hr): {len(duration_outliers)}\")\n",
+                    "\n",
+                    "kpm_outliers = df[df['avg_kpm'] > 400]\n",
+                    "print(f\"Anomalous KPM values (>400 KPM): {len(kpm_outliers)}\")"
+                ]
+            },
+            {
+                "cell_type": "markdown",
+                "metadata": {},
+                "source": [
+                    "### 5. Overlap Histogram (Focus Score Distributions)\n",
+                    "Splits the histogram color-wise: Teal for real sessions (if any exist) and Coral for synthetic sessions."
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "real_df = df[df['is_synthetic'] == 0]\n",
+                    "syn_df = df[df['is_synthetic'] == 1]\n",
+                    "\n",
+                    "plt.figure(figsize=(10, 6))\n",
+                    "if len(real_df) > 0:\n",
+                    "    sns.histplot(data=real_df, x=\"focus_score\", color=\"teal\", label=f\"Real Sessions ({len(real_df)})\", kde=True, alpha=0.6, bins=15)\n",
+                    "sns.histplot(data=syn_df, x=\"focus_score\", color=\"coral\", label=f\"Synthetic Sessions ({len(syn_df)})\", kde=True, alpha=0.6, bins=15)\n",
+                    "\n",
+                    "plt.title(\"Focus Score Distribution (Real vs Synthetic Overlap)\", fontsize=14, pad=15)\n",
+                    "plt.xlabel(\"Focus Score\", fontsize=12)\n",
+                    "plt.ylabel(\"Frequency Count\", fontsize=12)\n",
+                    "plt.xlim(0, 100)\n",
+                    "plt.legend(frameon=True)\n",
+                    "plt.tight_layout()\n",
+                    "plt.show()"
+                ]
+            },
+            {
+                "cell_type": "markdown",
+                "metadata": {},
+                "source": [
+                    "### 6. Correlation Matrix Heatmap\n",
+                    "Validates features, ensuring that `avg_buffer`, `focus_time`, and other metrics correctly correlate with the target `focus_score`."
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "features = [\n",
+                    "    \"avg_buffer\", \"min_buffer\", \"max_buffer\", \"focus_time\", \n",
+                    "    \"attention_time\", \"avg_kpm\", \"mouse_activity\", \"pause_count\", \n",
+                    "    \"app_switches\", \"session_duration\", \"hour_of_day\", \"day_of_week\", \n",
+                    "    \"session_mode_is_standard\", \"focus_score\"\n",
+                    "]\n",
+                    "\n",
+                    "plt.figure(figsize=(12, 10))\n",
+                    "corr = df[features].corr()\n",
+                    "mask = np.triu(np.ones_like(corr, dtype=bool))\n",
+                    "\n",
+                    "sns.heatmap(corr, mask=mask, cmap=\"coolwarm\", annot=True, fmt=\".2f\", square=True, linewidths=.5, cbar_kws={\"shrink\": .8})\n",
+                    "plt.title(\"Feature Correlation Matrix (Sliding Window)\", fontsize=14, pad=15)\n",
+                    "plt.tight_layout()\n",
+                    "plt.show()"
+                ]
+            },
+            {
+                "cell_type": "markdown",
+                "metadata": {},
+                "source": [
+                    "### 7. Time of Day vs Focus Score (Real Only)\n",
+                    "Scatter plot mapping hour of day vs focus score using ONLY real sessions, since synthetic timestamps are artificially backdated."
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "plt.figure(figsize=(10, 6))\n",
+                    "if len(real_df) > 0:\n",
+                    "    sns.scatterplot(data=real_df, x=\"hour_of_day\", y=\"focus_score\", color=\"teal\", s=100, alpha=0.8, edgecolor=\"k\")\n",
+                    "    plt.title(\"Hour of Day vs Focus Score (Real Sessions Only)\", fontsize=14, pad=15)\n",
+                    "    plt.xlim(-0.5, 23.5)\n",
+                    "    plt.xticks(range(24))\n",
+                    "else:\n",
+                    "    plt.text(0.5, 0.5, \"No Real Sessions Logged Yet\\n(Awaiting user focus sessions)\", \n",
+                    "             horizontalalignment='center', verticalalignment='center', fontsize=14, color='gray')\n",
+                    "    plt.title(\"Hour of Day vs Focus Score (Real Sessions - Empty State)\", fontsize=14, pad=15)\n",
+                    "plt.xlabel(\"Hour of Day (Local Time)\", fontsize=12)\n",
+                    "plt.ylabel(\"Focus Score\", fontsize=12)\n",
+                    "plt.ylim(-5, 105)\n",
+                    "plt.tight_layout()\n",
+                    "plt.show()"
+                ]
+            }
+        ],
+        "metadata": {
+            "kernelspec": {
+                "display_name": "Python 3 (ipykernel)",
+                "language": "python",
+                "name": "python3"
+            },
+            "language_info": {
+                "name": "python"
+            }
+        },
+        "nbformat": 4,
+        "nbformat_minor": 2
+    }
+    
+    with open(notebook_path, "w", encoding="utf-8") as f:
+        json.dump(notebook, f, indent=1)
+        
+    print(f"Generated Jupyter Notebook at: {notebook_path}")
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,9 @@
+{
+  "timestamp": 1783540611541,
+  "real_sessions": 0,
+  "synthetic_sessions": 40,
+  "test_r2": 0.07629037881223011,
+  "test_mae": 5.492407477573597,
+  "cv_r2_mean": -0.33663304377276526,
+  "cv_mae_mean": 6.13980894145537
+}

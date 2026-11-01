@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus Engine — Download</title>
+    <style>
+        :root {
+            --bg: #0b0b0f;
+            --card: #16161d;
+            --border: #26262f;
+            --text: #f2f2f5;
+            --muted: #9a9aa5;
+            --accent: #6d5efc;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 80px 20px;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            margin-bottom: 8px;
+        }
+
+        p.tagline {
+            color: var(--muted);
+            margin-top: 0;
+            margin-bottom: 40px;
+        }
+
+        #version-tag {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 32px;
+            border: 1px solid var(--border);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            width: 100%;
+            max-width: 780px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 24px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text);
+            transition: transform 0.15s ease, border-color 0.15s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+
+        .icon {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .platform {
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        .filetype {
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+
+        #status {
+            color: var(--muted);
+            margin-top: 20px;
+        }
+
+        footer {
+            margin-top: 60px;
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        footer a {
+            color: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Focus Engine</h1>
+    <p class="tagline">AI-powered focus tracking, on your desktop.</p>
+    <div id="version-tag">Loading latest version…</div>
+
+    <div class="cards" id="downloads"></div>
+    <div id="status"></div>
+
+    <footer>
+        Source on <a href="https://github.com/md-saqib001/focus-engine" target="_blank">GitHub</a>
+    </footer>
+
+    <script>
+        const REPO = "md-saqib001/focus-engine";
+
+        fetch(`https://api.github.com/repos/${REPO}/releases/latest`)
+            .then(r => {
+                if (!r.ok) throw new Error("No releases found yet");
+                return r.json();
+            })
+            .then(data => {
+                document.getElementById('version-tag').textContent = `Latest version: ${data.tag_name}`;
+
+                const platforms = [
+                    { match: a => a.name.endsWith('.exe'), icon: '🪟', label: 'Windows', sub: '.exe installer' },
+                    { match: a => a.name.endsWith('.dmg'), icon: '🍎', label: 'macOS', sub: '.dmg installer' },
+                    { match: a => a.name.endsWith('.AppImage'), icon: '🐧', label: 'Linux', sub: '.AppImage (portable)' },
+                    { match: a => a.name.endsWith('.deb'), icon: '🐧', label: 'Linux', sub: '.deb (Debian/Ubuntu)' },
+                ];
+
+                const container = document.getElementById('downloads');
+                let found = 0;
+
+                platforms.forEach(p => {
+                    const asset = data.assets.find(p.match);
+                    if (!asset) return;
+                    found++;
+                    const a = document.createElement('a');
+                    a.href = asset.browser_download_url;
+                    a.className = 'card';
+                    a.innerHTML = `
+            <div class="icon">${p.icon}</div>
+            <div class="platform">${p.label}</div>
+            <div class="filetype">${p.sub}</div>
+          `;
+                    container.appendChild(a);
+                });
+
+                if (found === 0) {
+                    document.getElementById('status').textContent = 'No installers found in the latest release yet.';
+                }
+            })
+            .catch(err => {
+                document.getElementById('version-tag').textContent = 'Could not load release info';
+                document.getElementById('status').textContent = err.message;
+            });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+@import './base.css';
+
+/* Override base background and root styles */
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #0f0f17;
+  color: #f8fafc;
+  display: block;
+}
+
+#root {
+  display: block;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Scrollbar styling for a sleek look */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f0f17;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1f1f2e;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #31314d;
+}

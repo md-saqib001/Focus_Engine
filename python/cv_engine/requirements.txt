@@ -1,0 +1,10 @@
+# Focus Engine — Computer Vision dependencies
+# Python 3.12 required (MediaPipe does not support 3.13+ yet)
+# Create venv with: py -3.12 -m venv python\cv_env
+# Install with:     python\cv_env\Scripts\pip install -r python\cv_engine\requirements.txt
+
+# Core CV stack — verified working together on Python 3.12 / Windows
+mediapipe==0.10.14
+numpy==2.5.1
+opencv-python==4.10.0.84
+websockets==12.0

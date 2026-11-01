@@ -1,0 +1,69 @@
+name: Build Focus Engine
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          draft: false
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    needs: create-release
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false        # <-- one OS failing no longer kills the others
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'   # bumped from 20 — see note below
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+          pip install -r python/cv_engine/requirements.txt
+
+      - name: Compile Python Executables
+        run: |
+          pyinstaller --onefile --distpath build/bin python/cv_engine/main_loop.py
+          pyinstaller --onefile --distpath build/bin python/ml/predict.py
+          pyinstaller --onefile --distpath build/bin python/ml/train_anomaly_model.py
+          pyinstaller --onefile --distpath build/bin python/ml/train_focus_model.py
+
+      - name: Install Node Dependencies
+        run: npm install
+
+      - name: Build and Package Electron App
+        run: |
+          npm run build
+          npm run dist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
