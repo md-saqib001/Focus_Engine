@@ -15,10 +15,10 @@ Welcome to the Focus Engine engineering team. Whether contributing to documentat
 
 ### 1. Branch Naming Strategy
 All new work should originate from a descriptive branch based on the four-engineer workstreams:
-- `eng1/database-<feature>`: Database schema, queries, or analytics aggregations.
-- `eng2/frontend-<feature>`: UI components, pages, or timer engine changes.
-- `eng3/blocking-<feature>`: Hosts file blocker, process manager, or preload security.
-- `eng4/cv-ml-<feature>`: Computer vision, telemetry pollers, or machine learning pipelines.
+- `eng1/frontend-db-<feature>`: Frontend UI, timer engine, database schema, or analytics aggregations.
+- `eng2/telemetry-buffer-<feature>`: Telemetry collectors, signal mappers, or Focus Buffer engine dynamics.
+- `eng3/blocking-<feature>`: Hosts file blocker, process manager, main process IPC, or preload security.
+- `eng4/cv-ml-<feature>`: Computer vision pipeline (OpenCV/MediaPipe) or machine learning models.
 
 ### 2. Conventional Commit Messages
 Commits must follow the Conventional Commits format:

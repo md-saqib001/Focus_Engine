@@ -169,12 +169,12 @@ If permissions are insufficient, the error is surfaced to the UI with specific i
 | Module | Location | Engineer |
 |--------|----------|---------|
 | Database | `src/main/database/` | Engineer 1 |
-| Frontend / Timer | `src/renderer/` | Engineer 2 |
+| Frontend / Timer | `src/renderer/` | Engineer 1 |
+| Analytics | `src/main/analytics/` | Engineer 1 |
+| Telemetry | `src/main/telemetry/` | Engineer 2 |
+| Buffer Engine | `src/main/buffer/` | Engineer 2 |
 | Blocking | `src/main/blocking/` | Engineer 3 |
 | Main Process / IPC | `src/main/index.ts`, `src/main/ipc/` | Engineer 3 |
 | Preload | `src/preload/` | Engineer 3 |
-| Telemetry | `src/main/telemetry/` | Engineer 4 |
-| Buffer Engine | `src/main/buffer/` | Engineer 4 |
 | Computer Vision | `python/cv_engine/` | Engineer 4 |
 | Machine Learning | `python/ml/` | Engineer 4 |
-| Analytics | `src/main/analytics/` | Engineer 1 |

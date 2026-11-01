@@ -395,10 +395,10 @@ Focus Engine's architecture is structured to support four engineers collaboratin
 
 | Workstream | Lead Engineer | Primary Module Ownership | Core Technical Responsibilities |
 |---|---|---|---|
-| **Workstream 1** | **Engineer 1** *(Placeholder)* | Database & Storage (`docs/01-database/`, `src/main/database/`, `src/main/analytics/`) | SQLite schema migrations, WAL tuning, index optimization, SQL analytics aggregations (heatmaps, streaks, productivity summaries). |
-| **Workstream 2** | **Engineer 2** *(Placeholder)* | Frontend & Time Calculation (`docs/02-frontend/`, `src/renderer/`) | React 18 UI layout, differential epoch time engine (`useTimerEngine`), session orchestrator (`useFocusSession`), dynamic SVG dials. |
+| **Workstream 1** | **Engineer 1** *(Placeholder)* | Frontend, Database & Analytics (`docs/01-database/`, `docs/02-frontend/`, `docs/12-analytics/`, `src/renderer/`, `src/main/database/`, `src/main/analytics/`) | React 18 UI layout, differential epoch time engine (`useTimerEngine`), session orchestrator (`useFocusSession`), SQLite schema migrations, WAL tuning, SQL analytics aggregations (heatmaps, streaks, recommendations). |
+| **Workstream 2** | **Engineer 2** *(Placeholder)* | Telemetry & Focus Buffer Engine (`docs/06-telemetry/`, `docs/11-focus-buffer/`, `src/main/telemetry/`, `src/main/buffer/`) | Operating system active window polling, KPM tracking, mouse activity, dynamic Focus Buffer energy reservoir ($0-100$), additive recovery ($+0.5/\text{sec}$), state machine transitions. |
 | **Workstream 3** | **Engineer 3** *(Placeholder)* | Blocking, Main Process & Security (`docs/03-blocking/`, `docs/04-main-process/`, `docs/05-preload/`) | Electron lifecycle coordinator, ContextBridge security, OS hosts loopback blocker, detached watchdog crash daemon, process force-kill. |
-| **Workstream 4** | **Engineer 4** *(Placeholder)* | Telemetry, Computer Vision & ML (`docs/06-telemetry/`, `docs/07-computer-vision/`, `docs/08-machine-learning/`, `python/`) | Win32 active window polling, KPM tracking, MediaPipe 3D head pose & gaze estimation, Random Forest regression, weekly retraining. |
+| **Workstream 4** | **Engineer 4** *(Placeholder)* | Computer Vision & Machine Learning (`docs/07-computer-vision/`, `docs/08-machine-learning/`, `python/cv_engine/`, `python/ml/`) | Python MediaPipe 3D head pose & iris gaze estimation, WebSocket telemetry server, Random Forest regression, Isolation Forest anomaly detection, weekly retraining daemon. |
 
 ---
 

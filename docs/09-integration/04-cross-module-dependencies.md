@@ -80,47 +80,54 @@ To prevent cross-module incompatibilities, several key contracts define the inte
 
 To support four engineers collaborating effectively without blocking each other:
 
-### Engineer 1: Database & Storage Workstream
-- **Primary Modules**: `docs/01-database/`, `src/main/database/`, `src/main/analytics/`
+### Engineer 1: Database, Analytics & Frontend Workstream
+- **Primary Modules**: `docs/01-database/`, `docs/02-frontend/`, `docs/12-analytics/`, `src/main/database/`, `src/main/analytics/`, `src/renderer/`
 - **Responsibilities**:
-  - SQLite schema management and table migrations.
-  - Index tuning and query performance optimization.
-  - Analytics aggregation queries (heatmaps, streak calculation, productivity KPIs).
+  - SQLite schema management, WAL mode tuning, and table migrations.
+  - Analytics aggregation queries (circadian heatmaps, streak calculation, productivity KPIs, recommendations).
+  - React 18 component architecture, layout shells, views, and dark-mode styling.
+  - Precision differential time calculation engine (`useTimerEngine.ts`), session orchestration (`useFocusSession.ts`), SVG dials, and post-session modal summaries.
 - **Integration Touchpoints**:
-  - Provides data repository methods consumed by Engineer 2 (Session History) and Engineer 4 (ML Extractor).
+  - Consumes the IPC API provided by Engineer 3 (`window.focusEngineAPI`) and binds UI components to telemetry and buffer states published by Engineer 2.
+  - Supplies historical session access and repository methods consumed by Engineer 4 (ML dataset extractor).
 
 ---
 
-### Engineer 2: Frontend & Time Calculation Workstream
-- **Primary Modules**: `docs/02-frontend/`, `src/renderer/`
+### Engineer 2: Telemetry & Focus Buffer Engine Workstream
+- **Primary Modules**: `docs/06-telemetry/`, `docs/11-focus-buffer/`, `src/main/telemetry/`, `src/main/buffer/`
 - **Responsibilities**:
-  - React 18 component design, layout shells, and dark-mode styling.
-  - Precision differential time calculation engine (`useTimerEngine.ts`).
-  - Session orchestration and modal workflows (`useFocusSession.ts`).
-  - SVG visualization gauges (`FocusBufferGauge.tsx`, `TimerDisplay.tsx`, `FocusHeatmap.tsx`).
+  - Operating system telemetry collection (Win32 active window polling, KPM tracking, mouse activity, idle tiers).
+  - Dynamic focus buffer energy reservoir (`FocusBuffer.ts`, exponential decay, $+0.5/\text{sec}$ additive recovery, clamping).
+  - State machine evaluation (`focused`, `warning`, `critical`, `paused`), transitions, and distraction penalty deduplication.
+  - Signal mapping architectures (`cvSignalMapper`, `keyboardSignalMapper`, `mouseSignalMapper`, `windowSignalMapper`).
+  - Session focus score aggregation and ML training target calculation (`focusScoreCalculator.ts`).
 - **Integration Touchpoints**:
-  - Consumes the IPC API provided by Engineer 3 (`window.focusEngineAPI`).
+  - Ingests raw facial attention and gaze streams from Engineer 4's Python CV engine.
+  - Writes buffer snapshots, transitions, and telemetry rows into Engineer 1's SQLite repositories.
+  - Emits real-time buffer updates and state changes over IPC channels managed by Engineer 3 to be consumed by Engineer 1's frontend.
 
 ---
 
 ### Engineer 3: Blocking, Main Process & Security Workstream
-- **Primary Modules**: `docs/03-blocking/`, `docs/04-main-process/`, `docs/05-preload/`, `src/main/blocking/`, `src/preload/`
+- **Primary Modules**: `docs/03-blocking/`, `docs/04-main-process/`, `docs/05-preload/`, `src/main/blocking/`, `src/preload/`, `src/main/ipc/`, `src/main/index.ts`
 - **Responsibilities**:
   - Application lifecycle management and window initialization (`index.ts`).
   - Preload bridge implementation and context isolation security.
   - Operating system hosts file redirection and detached crash watchdog daemon.
   - OS process tree inspection and application termination (`taskkill`/`pkill`).
+  - Centralized IPC routing architecture and security mediation across all modules.
 - **Integration Touchpoints**:
-  - Exposes typed IPC contracts consumed by Engineer 2; coordinates background services created by Engineer 4.
+  - Exposes typed IPC contracts consumed by Engineer 1's frontend; supervises and manages child processes and background services developed by Engineer 2 and Engineer 4.
 
 ---
 
-### Engineer 4: Telemetry, Computer Vision & Machine Learning Workstream
-- **Primary Modules**: `docs/06-telemetry/`, `docs/07-computer-vision/`, `docs/08-machine-learning/`, `src/main/telemetry/`, `python/`
+### Engineer 4: Computer Vision & Machine Learning Workstream
+- **Primary Modules**: `docs/07-computer-vision/`, `docs/08-machine-learning/`, `python/cv_engine/`, `python/ml/`
 - **Responsibilities**:
-  - Low-level OS telemetry collection (Win32 window polling, KPM tracker, idle detection).
-  - Python Computer Vision attention engine (OpenCV, MediaPipe FaceLandmarker, PnP head pose, gaze).
-  - Multi-modal Focus Buffer decay/recovery calculation (`bufferOrchestrator.ts`).
-  - Scikit-learn machine learning pipeline (Random Forest regression, Isolation Forest anomaly detection, weekly retraining).
+  - Python Computer Vision pipeline (OpenCV frame processing, MediaPipe Face Landmarker 478 points, 3D solvePnP head pose, iris gaze ratio).
+  - High-performance local WebSocket server (`ws://127.0.0.1:8765`) streaming real-time visual attention telemetry.
+  - Scikit-learn machine learning pipeline (Random Forest regression, Isolation Forest anomaly detection, dataset curation, 5-fold CV).
+  - Real-time prediction daemon and automated weekly retraining scheduler (`predict.py`, `train_focus_model.py`).
 - **Integration Touchpoints**:
-  - Delivers real-time telemetry streams to Engineer 3's IPC handlers; persists timeseries data via Engineer 1's repositories.
+  - Streams 30-fps CV attention and gaze metrics over WebSockets to Engineer 2's `cvSignalMapper`.
+  - Queries historical session rows from Engineer 1's SQLite database to build ML training sets and feed predictions to the analytics dashboard.
